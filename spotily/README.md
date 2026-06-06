@@ -37,8 +37,6 @@ node server.js
 
 # tem python tbm, se quise rodá
 
-by k .´.
-
 
 
 
