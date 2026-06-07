@@ -1,0 +1,1572 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XrivateYapitaZlircle | Private Capital Network</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #000000;
+      --bg-secondary: #0a0a0a;
+      --bg-tertiary: #111111;
+      --bg-card: rgba(15, 15, 15, 0.7);
+      --border: rgba(255, 255, 255, 0.06);
+      --border-glow: rgba(245, 158, 11, 0.3);
+      --text-primary: #f5f5f5;
+      --text-secondary: #888888;
+      --text-muted: #444444;
+      --accent: #f59e0b;
+      --accent-bright: #fbbf24;
+      --accent-dim: rgba(245, 158, 11, 0.1);
+      --success: #10b981;
+      --danger: #ef4444;
+      --glow: 0 0 20px rgba(245, 158, 11, 0.3);
+    }
+
+    body {
+      font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(245, 158, 11, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(245, 158, 11, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 20%, rgba(245, 158, 11, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 70% 80%, rgba(245, 158, 11, 0.04) 0%, transparent 40%);
+      pointer-events: none;
+      z-index: 0;
+      animation: glowPulse 8s ease-in-out infinite;
+    }
+
+    @keyframes glowPulse {
+
+      0%,
+      100% {
+        opacity: 0.6;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
+
+    .scanlines {
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(0deg,
+          transparent,
+          transparent 2px,
+          rgba(0, 0, 0, 0.15) 3px,
+          rgba(0, 0, 0, 0.15) 4px);
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.3;
+    }
+
+    .app {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border);
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      backdrop-filter: blur(20px);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo-mark {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-bright));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 20px;
+      color: #000;
+      box-shadow: var(--glow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logo-mark::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.4) 50%, transparent 70%);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% {
+        transform: translateX(-100%);
+      }
+
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo-text .brand {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--text-primary);
+    }
+
+    .logo-text .sub {
+      font-size: 9px;
+      color: var(--text-muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .nav-section {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .nav-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding: 0 12px 8px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 13px;
+      color: var(--text-secondary);
+      position: relative;
+    }
+
+    .nav-item:hover {
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+    }
+
+    .nav-item.active {
+      background: var(--accent-dim);
+      color: var(--accent-bright);
+      border: 1px solid var(--border-glow);
+    }
+
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 20px;
+      background: var(--accent);
+      border-radius: 0 3px 3px 0;
+    }
+
+    .nav-icon {
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .user-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #d97706);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+      color: #000;
+      position: relative;
+    }
+
+    .user-avatar::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 10px;
+      height: 10px;
+      background: var(--success);
+      border: 2px solid var(--bg-tertiary);
+      border-radius: 50%;
+    }
+
+    .user-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .user-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .user-tier {
+      font-size: 10px;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .tier-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--accent);
+    }
+
+    .main {
+      padding: 24px 32px;
+      overflow-y: auto;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-left h1 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 4px;
+    }
+
+    .header-left p {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .header-right {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .status-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--success);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      }
+
+      50% {
+        opacity: 0.8;
+        box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+      }
+    }
+
+    .btn-primary {
+      padding: 10px 20px;
+      background: linear-gradient(135deg, var(--accent), #d97706);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--glow);
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      backdrop-filter: blur(20px);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .kpi-card:hover {
+      border-color: var(--border-glow);
+      transform: translateY(-2px);
+    }
+
+    .kpi-card:hover::before {
+      opacity: 1;
+    }
+
+    .kpi-card.featured {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(245, 158, 11, 0.02));
+      border-color: var(--border-glow);
+    }
+
+    .kpi-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .kpi-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    .kpi-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--accent-dim);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .kpi-value {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin-bottom: 8px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .kpi-change {
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .kpi-change.positive {
+      color: var(--success);
+    }
+
+    .kpi-change.negative {
+      color: var(--danger);
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      backdrop-filter: blur(20px);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-title {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .panel-subtitle {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .panel-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .tab {
+      padding: 6px 12px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 11px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab.active {
+      background: var(--accent-dim);
+      color: var(--accent-bright);
+      border-color: var(--border-glow);
+    }
+
+    .wallet-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .wallet-card {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .wallet-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--wallet-color, var(--accent));
+      opacity: 0.6;
+    }
+
+    .wallet-card:hover {
+      border-color: var(--border-glow);
+      transform: translateY(-2px);
+    }
+
+    .wallet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .wallet-name {
+      font-size: 11px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .wallet-percent {
+      font-size: 10px;
+      color: var(--text-muted);
+      background: var(--bg-primary);
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    .wallet-value {
+      font-size: 20px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+    }
+
+    .wallet-change {
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .wallet-change.positive {
+      color: var(--success);
+    }
+
+    .wallet-change.negative {
+      color: var(--danger);
+    }
+
+    .allocation-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .alloc-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .alloc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .alloc-name {
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .alloc-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .alloc-value {
+      color: var(--text-secondary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .alloc-bar {
+      height: 6px;
+      background: var(--bg-tertiary);
+      border-radius: 3px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .alloc-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 1s ease;
+      position: relative;
+    }
+
+    .alloc-fill::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      animation: shimmer 2s infinite;
+    }
+
+    .ticker {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      overflow: hidden;
+    }
+
+    .ticker-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .ticker-live {
+      width: 6px;
+      height: 6px;
+      background: var(--danger);
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+
+    .ticker-content {
+      display: flex;
+      gap: 32px;
+      overflow: hidden;
+      flex: 1;
+    }
+
+    .ticker-item {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .ticker-item .name {
+      color: var(--text-secondary);
+    }
+
+    .ticker-item .value {
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stream-panel {
+      margin-top: 24px;
+    }
+
+    .stream-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .stream-item {
+      display: grid;
+      grid-template-columns: auto 1fr auto auto auto;
+      gap: 16px;
+      align-items: center;
+      padding: 14px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      animation: slideIn 0.4s ease;
+      transition: all 0.2s;
+    }
+
+    .stream-item:hover {
+      border-color: var(--border-glow);
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .stream-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .stream-icon.liquidity {
+      background: rgba(59, 130, 246, 0.1);
+      color: #3b82f6;
+    }
+
+    .stream-icon.settlement {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+    }
+
+    .stream-icon.allocation {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--accent);
+    }
+
+    .stream-icon.distribution {
+      background: rgba(168, 85, 247, 0.1);
+      color: #a855f7;
+    }
+
+    .stream-info .title {
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .stream-info .meta {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .stream-amount {
+      font-size: 13px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+
+    .stream-amount.positive {
+      color: var(--success);
+    }
+
+    .stream-amount.negative {
+      color: var(--danger);
+    }
+
+    .stream-wallet {
+      font-size: 10px;
+      color: var(--text-secondary);
+      text-align: right;
+      padding: 4px 8px;
+      background: var(--bg-primary);
+      border-radius: 6px;
+    }
+
+    .stream-time {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 200px;
+      margin-top: 16px;
+    }
+
+    canvas {
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    .live-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 12px;
+      font-size: 10px;
+      color: var(--danger);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--danger);
+      border-radius: 50%;
+      animation: pulse 1s infinite;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-primary);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--bg-tertiary);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .kpi-card,
+    .panel,
+    .stream-item {
+      animation: fadeInUp 0.6s ease backwards;
+    }
+
+    .kpi-card:nth-child(1) {
+      animation-delay: 0.05s;
+    }
+
+    .kpi-card:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    .kpi-card:nth-child(3) {
+      animation-delay: 0.15s;
+    }
+
+    .kpi-card:nth-child(4) {
+      animation-delay: 0.2s;
+    }
+
+    @media (max-width: 1200px) {
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .wallet-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="scanlines"></div>
+
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="logo-mark">X</div>
+        <div class="logo-text">
+          <span class="brand">XRIVATE</span>
+          <span class="sub">YapitaZlircle</span>
+        </div>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-label">Principal</div>
+        <div class="nav-item active">
+          <span class="nav-icon">◈</span>
+          <span>Dashboard</span>
+        </div>
+        <div class="nav-item">
+          <span class="nav-icon">◉</span>
+          <span>Portfolio</span>
+        </div>
+        <div class="nav-item">
+          <span class="nav-icon">◎</span>
+          <span>Alocação</span>
+        </div>
+        <div class="nav-item">
+          <span class="nav-icon">◆</span>
+          <span>Operações</span>
+        </div>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-label">Capital</div>
+        <div class="nav-item">
+          <span class="nav-icon">◇</span>
+          <span>Distribuições</span>
+        </div>
+        <div class="nav-item">
+          <span class="nav-icon">◐</span>
+          <span>Liquidez</span>
+        </div>
+        <div class="nav-item">
+          <span class="nav-icon">◑</span>
+          <span>Revenue Share</span>
+        </div>
+      </div>
+
+      <div class="nav-section">
+        <div class="nav-label">Sistema</div>
+        <div class="nav-item">
+          <span class="nav-icon">◒</span>
+          <span>Governança</span>
+        </div>
+        <div class="nav-item">
+          <span class="nav-icon">◓</span>
+          <span>Configurações</span>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="user-card">
+          <div class="user-avatar">RS</div>
+          <div class="user-info">
+            <div class="user-name">R. Silva</div>
+            <div class="user-tier">
+              <span class="tier-dot"></span>
+              <span>Circle Sovereign</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="header">
+        <div class="header-left">
+          <h1>Visão Geral do Patrimônio</h1>
+          <p>Bem-vindo de volta. Seu ecossistema está operando normalmente.</p>
+        </div>
+        <div class="header-right">
+          <div class="status-pill">
+            <span class="status-dot"></span>
+            <span>Sistema Operacional</span>
+          </div>
+          <button class="btn-primary">+ Nova Alocação</button>
+        </div>
+      </div>
+
+      <div class="ticker">
+        <div class="ticker-label">
+          <span class="ticker-live"></span>
+          <span>Live Feed</span>
+        </div>
+        <div class="ticker-content" id="ticker">
+          <div class="ticker-item">
+            <span class="name">Yield Pool:</span>
+            <span class="value" style="color: var(--success);" id="ticker-yield">+11.50%</span>
+          </div>
+          <div class="ticker-item">
+            <span class="name">Pool Total:</span>
+            <span class="value" id="ticker-pool">R$ 100.000.000.000,00</span>
+          </div>
+          <div class="ticker-item">
+            <span class="name">Membros Ativos:</span>
+            <span class="value" id="ticker-members">1.247</span>
+          </div>
+          <div class="ticker-item">
+            <span class="name">Janela:</span>
+            <span class="value" style="color: var(--accent);" id="ticker-window">Aberta (Q4)</span>
+          </div>
+          <div class="ticker-item">
+            <span class="name">Última Dist.:</span>
+            <span class="value" style="color: var(--success);" id="ticker-last-dist">R$ 450.000,00</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Patrimônio Alocado</span>
+            <div class="kpi-icon">◈</div>
+          </div>
+          <div class="kpi-value" id="kpi-allocated">R$ 0,00</div>
+          <div class="kpi-change positive" id="kpi-allocated-change">▲ +2.4% este mês</div>
+        </div>
+
+        <div class="kpi-card featured">
+          <div class="kpi-header">
+            <span class="kpi-label">Receita Acumulada</span>
+            <div class="kpi-icon">◉</div>
+          </div>
+          <div class="kpi-value" id="kpi-revenue" style="color: var(--accent-bright);">R$ 0,00</div>
+          <div class="kpi-change positive" id="kpi-revenue-change">▲ +12.8% vs trimestre anterior</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Yield Anualizado</span>
+            <div class="kpi-icon">◎</div>
+          </div>
+          <div class="kpi-value" id="kpi-yield">0.00%</div>
+          <div class="kpi-change positive" id="kpi-yield-change">▲ +0.3% vs benchmark</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Revenue Share (30%)</span>
+            <div class="kpi-icon">◆</div>
+          </div>
+          <div class="kpi-value" id="kpi-share">R$ 0,00</div>
+          <div class="kpi-change positive" id="kpi-share-change">▲ Próximo: 15 Dez</div>
+        </div>
+      </div>
+
+      <div class="content-grid">
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">Alocação Estratégica do Pool</div>
+              <div class="panel-subtitle">Distribuição dos R$ 100 bilhões em ativos produtivos</div>
+            </div>
+            <div class="panel-actions">
+              <div class="tab active">Percentual</div>
+              <div class="tab">Valor</div>
+            </div>
+          </div>
+
+          <div class="allocation-list">
+            <div class="alloc-item">
+              <div class="alloc-header">
+                <span class="alloc-name">
+                  <span class="alloc-dot" style="background: #3b82f6;"></span>
+                  Reserva de Liquidez
+                </span>
+                <span class="alloc-value" id="alloc-liquidity">R$ 25.000.000.000,00 • 25%</span>
+              </div>
+              <div class="alloc-bar">
+                <div class="alloc-fill" style="width: 25%; background: linear-gradient(90deg, #3b82f6, #60a5fa);"></div>
+              </div>
+            </div>
+
+            <div class="alloc-item">
+              <div class="alloc-header">
+                <span class="alloc-name">
+                  <span class="alloc-dot" style="background: #10b981;"></span>
+                  Tesouraria Institucional
+                </span>
+                <span class="alloc-value" id="alloc-treasury">R$ 30.000.000.000,00 • 30%</span>
+              </div>
+              <div class="alloc-bar">
+                <div class="alloc-fill" style="width: 30%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+              </div>
+            </div>
+
+            <div class="alloc-item">
+              <div class="alloc-header">
+                <span class="alloc-name">
+                  <span class="alloc-dot" style="background: #f59e0b;"></span>
+                  Crédito Corporativo
+                </span>
+                <span class="alloc-value" id="alloc-credit">R$ 20.000.000.000,00 • 20%</span>
+              </div>
+              <div class="alloc-bar">
+                <div class="alloc-fill" style="width: 20%; background: linear-gradient(90deg, #f59e0b, #fbbf24);"></div>
+              </div>
+            </div>
+
+            <div class="alloc-item">
+              <div class="alloc-header">
+                <span class="alloc-name">
+                  <span class="alloc-dot" style="background: #a855f7;"></span>
+                  Infraestrutura
+                </span>
+                <span class="alloc-value" id="alloc-infra">R$ 15.000.000.000,00 • 15%</span>
+              </div>
+              <div class="alloc-bar">
+                <div class="alloc-fill" style="width: 15%; background: linear-gradient(90deg, #a855f7, #c084fc);"></div>
+              </div>
+            </div>
+
+            <div class="alloc-item">
+              <div class="alloc-header">
+                <span class="alloc-name">
+                  <span class="alloc-dot" style="background: #ef4444;"></span>
+                  Operações Estratégicas
+                </span>
+                <span class="alloc-value" id="alloc-ops">R$ 10.000.000.000,00 • 10%</span>
+              </div>
+              <div class="alloc-bar">
+                <div class="alloc-fill" style="width: 10%; background: linear-gradient(90deg, #ef4444, #f87171);"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-container">
+            <canvas id="yieldChart"></canvas>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">Carteiras em Tempo Real</div>
+              <div class="panel-subtitle">Valores atualizados a cada segundo</div>
+            </div>
+            <div class="live-indicator">
+              <span class="live-dot"></span>
+              <span>Live</span>
+            </div>
+          </div>
+
+          <div class="wallet-grid">
+            <div class="wallet-card" style="--wallet-color: #3b82f6;">
+              <div class="wallet-header">
+                <span class="wallet-name">Reserva Liquidez</span>
+                <span class="wallet-percent">25%</span>
+              </div>
+              <div class="wallet-value" id="wallet-liquidity">R$ 0,00</div>
+              <div class="wallet-change positive" id="wallet-liquidity-change">▲ +R$ 0,00</div>
+            </div>
+
+            <div class="wallet-card" style="--wallet-color: #10b981;">
+              <div class="wallet-header">
+                <span class="wallet-name">Tesouraria</span>
+                <span class="wallet-percent">30%</span>
+              </div>
+              <div class="wallet-value" id="wallet-treasury">R$ 0,00</div>
+              <div class="wallet-change positive" id="wallet-treasury-change">▲ +R$ 0,00</div>
+            </div>
+
+            <div class="wallet-card" style="--wallet-color: #f59e0b;">
+              <div class="wallet-header">
+                <span class="wallet-name">Crédito Corp</span>
+                <span class="wallet-percent">20%</span>
+              </div>
+              <div class="wallet-value" id="wallet-credit">R$ 0,00</div>
+              <div class="wallet-change positive" id="wallet-credit-change">▲ +R$ 0,00</div>
+            </div>
+
+            <div class="wallet-card" style="--wallet-color: #a855f7;">
+              <div class="wallet-header">
+                <span class="wallet-name">Infraestrutura</span>
+                <span class="wallet-percent">15%</span>
+              </div>
+              <div class="wallet-value" id="wallet-infra">R$ 0,00</div>
+              <div class="wallet-change positive" id="wallet-infra-change">▲ +R$ 0,00</div>
+            </div>
+
+            <div class="wallet-card" style="--wallet-color: #ef4444;">
+              <div class="wallet-header">
+                <span class="wallet-name">Operações</span>
+                <span class="wallet-percent">10%</span>
+              </div>
+              <div class="wallet-value" id="wallet-ops">R$ 0,00</div>
+              <div class="wallet-change positive" id="wallet-ops-change">▲ +R$ 0,00</div>
+            </div>
+
+            <div class="wallet-card" style="--wallet-color: var(--accent);">
+              <div class="wallet-header">
+                <span class="wallet-name">Total Pool</span>
+                <span class="wallet-percent">100%</span>
+              </div>
+              <div class="wallet-value" id="wallet-total">R$ 0,00</div>
+              <div class="wallet-change positive" id="wallet-total-change">▲ +R$ 0,00</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel stream-panel">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">Streaming de Liquidações em Tempo Real</div>
+            <div class="panel-subtitle">Operações processadas e liquidadas ao vivo</div>
+          </div>
+          <div class="live-indicator">
+            <span class="live-dot"></span>
+            <span id="stream-count">0 operações</span>
+          </div>
+        </div>
+
+        <div class="stream-list" id="stream-list">
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const formatBRL = (value) => {
+      return new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(value);
+    };
+
+    const formatNumber = (value) => {
+      return new Intl.NumberFormat('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(value);
+    };
+
+    const wallets = {
+      liquidity: { base: 25000000000, current: 25000000000, change: 0 },
+      treasury: { base: 30000000000, current: 30000000000, change: 0 },
+      credit: { base: 20000000000, current: 20000000000, change: 0 },
+      infra: { base: 15000000000, current: 15000000000, change: 0 },
+      ops: { base: 10000000000, current: 10000000000, change: 0 }
+    };
+
+    const kpiData = {
+      allocated: 12500000,
+      revenue: 450000,
+      yield: 11.50,
+      share: 135000
+    };
+
+    const streamOperations = [
+      { type: 'liquidity', icon: '◈', title: 'Resgate Liquidez', wallet: 'Reserva Liquidez' },
+      { type: 'settlement', icon: '◉', title: 'Liquidação Crédito', wallet: 'Crédito Corp' },
+      { type: 'allocation', icon: '◎', title: 'Nova Alocação', wallet: 'Tesouraria' },
+      { type: 'distribution', icon: '◆', title: 'Revenue Share', wallet: 'Operações' },
+      { type: 'settlement', icon: '◉', title: 'Cupom Infra', wallet: 'Infraestrutura' },
+      { type: 'liquidity', icon: '◈', title: 'Aporte Capital', wallet: 'Reserva Liquidez' },
+      { type: 'allocation', icon: '◎', title: 'Aquisição Título', wallet: 'Tesouraria' },
+      { type: 'distribution', icon: '◆', title: 'Dividendo FII', wallet: 'Operações' }
+    ];
+
+    let streamCount = 0;
+    const maxStreamItems = 20;
+
+    function updateWallets() {
+      Object.keys(wallets).forEach(key => {
+        const wallet = wallets[key];
+        const variation = (Math.random() - 0.3) * 50000000;
+        wallet.current += variation;
+        wallet.change = variation;
+
+        const el = document.getElementById(`wallet-${key}`);
+        const changeEl = document.getElementById(`wallet-${key}-change`);
+
+        if (el) el.textContent = formatBRL(wallet.current);
+        if (changeEl) {
+          const sign = variation >= 0 ? '▲' : '▼';
+          const color = variation >= 0 ? 'positive' : 'negative';
+          changeEl.className = `wallet-change ${color}`;
+          changeEl.textContent = `${sign} ${formatBRL(Math.abs(variation))}`;
+        }
+      });
+
+      const total = Object.values(wallets).reduce((sum, w) => sum + w.current, 0);
+      const totalEl = document.getElementById('wallet-total');
+      const totalChangeEl = document.getElementById('wallet-total-change');
+
+      if (totalEl) totalEl.textContent = formatBRL(total);
+      if (totalChangeEl) {
+        const totalChange = Object.values(wallets).reduce((sum, w) => sum + w.change, 0);
+        const sign = totalChange >= 0 ? '▲' : '▼';
+        const color = totalChange >= 0 ? 'positive' : 'negative';
+        totalChangeEl.className = `wallet-change ${color}`;
+        totalChangeEl.textContent = `${sign} ${formatBRL(Math.abs(totalChange))}`;
+      }
+
+      const allocLiquidity = document.getElementById('alloc-liquidity');
+      const allocTreasury = document.getElementById('alloc-treasury');
+      const allocCredit = document.getElementById('alloc-credit');
+      const allocInfra = document.getElementById('alloc-infra');
+      const allocOps = document.getElementById('alloc-ops');
+
+      if (allocLiquidity) allocLiquidity.textContent = `${formatBRL(wallets.liquidity.current)} • 25%`;
+      if (allocTreasury) allocTreasury.textContent = `${formatBRL(wallets.treasury.current)} • 30%`;
+      if (allocCredit) allocCredit.textContent = `${formatBRL(wallets.credit.current)} • 20%`;
+      if (allocInfra) allocInfra.textContent = `${formatBRL(wallets.infra.current)} • 15%`;
+      if (allocOps) allocOps.textContent = `${formatBRL(wallets.ops.current)} • 10%`;
+    }
+
+    function updateKPIs() {
+      kpiData.allocated += (Math.random() - 0.2) * 50000;
+      kpiData.revenue += (Math.random() - 0.1) * 5000;
+      kpiData.yield += (Math.random() - 0.5) * 0.05;
+      kpiData.share = kpiData.revenue * 0.3;
+
+      const allocatedEl = document.getElementById('kpi-allocated');
+      const revenueEl = document.getElementById('kpi-revenue');
+      const yieldEl = document.getElementById('kpi-yield');
+      const shareEl = document.getElementById('kpi-share');
+
+      if (allocatedEl) allocatedEl.textContent = formatBRL(kpiData.allocated);
+      if (revenueEl) revenueEl.textContent = formatBRL(kpiData.revenue);
+      if (yieldEl) yieldEl.textContent = `${kpiData.yield.toFixed(2)}%`;
+      if (shareEl) shareEl.textContent = formatBRL(kpiData.share);
+
+      const tickerYield = document.getElementById('ticker-yield');
+      const tickerPool = document.getElementById('ticker-pool');
+      const tickerLastDist = document.getElementById('ticker-last-dist');
+
+      if (tickerYield) tickerYield.textContent = `+${kpiData.yield.toFixed(2)}%`;
+      if (tickerPool) tickerPool.textContent = formatBRL(Object.values(wallets).reduce((s, w) => s + w.current, 0));
+      if (tickerLastDist) tickerLastDist.textContent = formatBRL(kpiData.share);
+    }
+
+    function addStreamItem() {
+      const op = streamOperations[Math.floor(Math.random() * streamOperations.length)];
+      const amount = Math.random() * 5000000 + 100000;
+      const isPositive = Math.random() > 0.3;
+      const now = new Date();
+      const timeStr = now.toLocaleTimeString('pt-BR', { hour12: false });
+
+      const streamList = document.getElementById('stream-list');
+      const item = document.createElement('div');
+      item.className = 'stream-item';
+      item.innerHTML = `
+      <div class="stream-icon ${op.type}">${op.icon}</div>
+      <div class="stream-info">
+        <div class="title">${op.title}</div>
+        <div class="meta">ID: #${Math.floor(Math.random() * 999999).toString().padStart(6, '0')}</div>
+      </div>
+      <div class="stream-amount ${isPositive ? 'positive' : 'negative'}">
+        ${isPositive ? '+' : '-'} ${formatBRL(amount)}
+      </div>
+      <div class="stream-wallet">${op.wallet}</div>
+      <div class="stream-time">${timeStr}</div>
+    `;
+
+      streamList.insertBefore(item, streamList.firstChild);
+      streamCount++;
+
+      const streamCountEl = document.getElementById('stream-count');
+      if (streamCountEl) streamCountEl.textContent = `${streamCount} operações`;
+
+      while (streamList.children.length > maxStreamItems) {
+        streamList.removeChild(streamList.lastChild);
+      }
+    }
+
+    const canvas = document.getElementById('yieldChart');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      canvas.width = rect.width * 2;
+      canvas.height = rect.height * 2;
+      ctx.scale(2, 2);
+    }
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const dataPoints = [];
+    for (let i = 0; i < 30; i++) {
+      dataPoints.push(10 + Math.random() * 2);
+    }
+
+    function drawChart() {
+      const w = canvas.width / 2;
+      const h = canvas.height / 2;
+
+      ctx.clearRect(0, 0, w, h);
+
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+      ctx.lineWidth = 1;
+      for (let i = 0; i < 5; i++) {
+        const y = (h / 5) * i;
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+      }
+
+      const gradient = ctx.createLinearGradient(0, 0, 0, h);
+      gradient.addColorStop(0, 'rgba(245, 158, 11, 0.3)');
+      gradient.addColorStop(1, 'rgba(245, 158, 11, 0)');
+
+      ctx.beginPath();
+      ctx.moveTo(0, h);
+
+      const stepX = w / (dataPoints.length - 1);
+      dataPoints.forEach((val, i) => {
+        const x = i * stepX;
+        const y = h - ((val - 9) / 4) * h;
+        if (i === 0) ctx.lineTo(x, y);
+        else {
+          const prevX = (i - 1) * stepX;
+          const prevY = h - ((dataPoints[i - 1] - 9) / 4) * h;
+          const cpX = (prevX + x) / 2;
+          ctx.bezierCurveTo(cpX, prevY, cpX, y, x, y);
+        }
+      });
+
+      ctx.lineTo(w, h);
+      ctx.closePath();
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      ctx.beginPath();
+      dataPoints.forEach((val, i) => {
+        const x = i * stepX;
+        const y = h - ((val - 9) / 4) * h;
+        if (i === 0) ctx.moveTo(x, y);
+        else {
+          const prevX = (i - 1) * stepX;
+          const prevY = h - ((dataPoints[i - 1] - 9) / 4) * h;
+          const cpX = (prevX + x) / 2;
+          ctx.bezierCurveTo(cpX, prevY, cpX, y, x, y);
+        }
+      });
+
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 2;
+      ctx.shadowColor = '#f59e0b';
+      ctx.shadowBlur = 10;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+
+      const lastX = (dataPoints.length - 1) * stepX;
+      const lastY = h - ((dataPoints[dataPoints.length - 1] - 9) / 4) * h;
+      ctx.beginPath();
+      ctx.arc(lastX, lastY, 4, 0, Math.PI * 2);
+      ctx.fillStyle = '#fbbf24';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(lastX, lastY, 8, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(251, 191, 36, 0.3)';
+      ctx.fill();
+    }
+
+    drawChart();
+
+    setInterval(() => {
+      dataPoints.shift();
+      dataPoints.push(10 + Math.random() * 2);
+      drawChart();
+    }, 2000);
+
+    setInterval(updateWallets, 1000);
+    setInterval(updateKPIs, 1500);
+    setInterval(addStreamItem, 2500);
+
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', function () {
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', function () {
+        this.parentElement.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      const x = e.clientX / window.innerWidth;
+      const y = e.clientY / window.innerHeight;
+      document.body.style.background = `
+      radial-gradient(circle at ${x * 100}% ${y * 100}%, rgba(245, 158, 11, 0.05) 0%, transparent 50%),
+      #000000
+    `;
+    });
+
+    updateWallets();
+    updateKPIs();
+    for (let i = 0; i < 5; i++) {
+      setTimeout(addStreamItem, i * 500);
+    }
+  </script>
+</body>
+
+</html>
